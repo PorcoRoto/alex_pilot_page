@@ -117,6 +117,35 @@
         nav ul li a:hover {
             color: var(--secondary-color);
         }
+
+        /* Banner Container */
+        .banner-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Banner Header */
+        .banner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Banner Content */
+        .banner-content {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
         
         /* Hero Section */
         .hero {
@@ -360,6 +389,24 @@ stroke-width="2"/></svg>');
                 <a href="#contact" class="btn">Contact Me</a>
             </div>
         </div>
+        <div class="banner-container">
+        <div class="banner-header">
+            <div class="banner-title">Image Rotation Banner</div>
+            <div class="controls">
+                <button class="btn" id="pauseBtn">Pause</button>
+                <button class="btn" id="playBtn">Play</button>
+                <button class="btn" id="nextBtn">Next</button>
+            </div>
+        </div>
+        
+        <div class="banner-content" id="bannerContent">
+            <!-- Slides will be dynamically inserted here -->
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
     </section>
 
     <!-- About Section -->
