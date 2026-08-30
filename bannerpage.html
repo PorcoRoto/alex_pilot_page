@@ -262,32 +262,8 @@
             <!-- Slides will be dynamically inserted here -->
         </div>
         
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-    </div>
-    
-    <div class="upload-container">
-        <div class="upload-title">Upload Your Own Images</div>
-        <div class="upload-area" id="uploadArea">
-            <p>Click to upload your images or drag and drop them here</p>
-        </div>
-        <input type="file" id="imageInput" accept="image/*" multiple>
-        <button class="upload-btn" id="uploadBtn">Upload Images</button>
-    </div>
-    
-    <div class="instructions">
-        <h3>How It Works:</h3>
-        <ul>
-            <li>The banner automatically rotates through images every 5 seconds</li>
-            <li>Use the buttons to pause, play, or navigate manually</li>
-            <li>Upload your own images to customize the banner</li>
-            <li>The progress bar shows the rotation status</li>
-            <li>Sample images are included for demonstration</li>
-        </ul>
-    </div>
-    
-    <script>
+
+        <script>
         // Sample images for demonstration
         const sampleImages = [
             { id: 1, url: "https://porcoroto.github.io/alex_pilot_page/banner1.png", caption: "Hangin" },
@@ -299,14 +275,10 @@
         
         // DOM Elements
         const bannerContent = document.getElementById('bannerContent');
-        const progressBar = document.getElementById('progressBar');
         const pauseBtn = document.getElementById('pauseBtn');
         const playBtn = document.getElementById('playBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const uploadArea = document.getElementById('uploadArea');
-        const imageInput = document.getElementById('imageInput');
-        const uploadBtn = document.getElementById('uploadBtn');
-        
+
         // Variables
         let currentSlide = 0;
         let interval;
@@ -341,37 +313,6 @@
             startInterval();
         }
         
-        // Create a new slide from uploaded image
-        function createSlideFromImage(imageFile, index) {
-            const slide = document.createElement('div');
-            slide.className = 'slide';
-            slide.id = `slide-${index}`;
-            slide.dataset.index = index;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                slide.innerHTML = `
-                    <img src="${e.target.result}" alt="Uploaded Image ${index + 1}" class="slide-image">
-                    <div class="slide-caption">Uploaded Image ${index + 1}</div>
-                `;
-                bannerContent.appendChild(slide);
-                updateSlides();
-            };
-            reader.readAsDataURL(imageFile);
-        }
-        
-        // Update the slides array with user images
-        function updateSlides() {
-            // Remove all slides except the first one
-            while (bannerContent.children.length > 1) {
-                bannerContent.removeChild(bannerContent.lastChild);
-            }
-            
-            // Add sample images (except the first one) as user images
-            for (let i = 1; i < sampleImages.length; i++) {
-                createSlideFromImage(sampleImages[i].url, i);
-            }
-        }
         
         // Start the automatic rotation
         function startInterval() {
@@ -380,7 +321,7 @@
                     goToNextSlide();
                     updateProgressBar();
                 }
-            }, 5000);
+            }, 2000);
         }
         
         // Go to the next slide
@@ -394,12 +335,6 @@
             
             // Add active class to new slide
             slides[currentSlide].classList.add('active');
-        }
-        
-        // Update the progress bar
-        function updateProgressBar() {
-            const progress = ((Date.now() % 5000) / 5000) * 100;
-            progressBar.style.width = `${progress}%`;
         }
         
         // Event Listeners for Controls
@@ -426,55 +361,17 @@
             startInterval();
         });
         
-        // Upload functionality
-        uploadArea.addEventListener('click', () => {
-            imageInput.click();
-        });
-        
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'white';
-            uploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
-        });
-        
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-            uploadArea.style.backgroundColor = 'transparent';
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-            uploadArea.style.backgroundColor = 'transparent';
-            
-            if (e.dataTransfer.files.length > 0) {
-                handleImageUpload(e.dataTransfer.files);
-            }
-        });
-        
         imageInput.addEventListener('change', () => {
             if (imageInput.files.length > 0) {
                 handleImageUpload(imageInput.files);
             }
         });
         
-        uploadBtn.addEventListener('click', () => {
-            imageInput.click();
-        });
-        
-        // Handle image upload
-        function handleImageUpload(files) {
-            // Clear previous user images (except the first sample)
-            while (bannerContent.children.length > 1) {
-                bannerContent.removeChild(bannerContent.lastChild);
-            }
-            
-            // Add new user images
-            userImages = Array.from(files);
-            userImages.forEach((file, index) => {
-                createSlideFromImage(file, index);
-            });
-        }
+        // Initialize the banner when the page loads
+        window.addEventListener('DOMContentLoaded', initializeBanner);
+    </script>
+    </div>
+    
         
         // Initialize the banner when the page loads
         window.addEventListener('DOMContentLoaded', initializeBanner);
