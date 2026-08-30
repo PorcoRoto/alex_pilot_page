@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Rotating Banner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+        
+        /* Banner Container */
+        .banner-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Banner Header */
+        .banner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .banner-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Banner Content */
+        .banner-content {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        /* Upload Area */
+        .upload-container {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .upload-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: white;
+        }
+        
+        .upload-area p {
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        #imageInput {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Instructions */
+        .instructions {
+            margin-top: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 800px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .banner-title {
+                font-size: 1.2rem;
+            }
+            
+            .slide-caption {
+                font-size: 1rem;
+                padding: 5px;
+            }
+            
+            .banner-content {
+                height: 300px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Image Rotating Banner</h1>
+        <p>Upload your own images or use the sample images to create a dynamic rotating banner with smooth slide animations.</p>
+    </header>
+    
+    <div class="banner-container">
+        <div class="banner-header">
+            <div class="banner-title">Image Rotation Banner</div>
+            <div class="controls">
+                <button class="btn" id="pauseBtn">Pause</button>
+                <button class="btn" id="playBtn">Play</button>
+                <button class="btn" id="nextBtn">Next</button>
+            </div>
+        </div>
+        
+        <div class="banner-content" id="bannerContent">
+            <!-- Slides will be dynamically inserted here -->
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+    
+    <div class="upload-container">
+        <div class="upload-title">Upload Your Own Images</div>
+        <div class="upload-area" id="uploadArea">
+            <p>Click to upload your images or drag and drop them here</p>
+        </div>
+        <input type="file" id="imageInput" accept="image/*" multiple>
+        <button class="upload-btn" id="uploadBtn">Upload Images</button>
+    </div>
+    
+    <div class="instructions">
+        <h3>How It Works:</h3>
+        <ul>
+            <li>The banner automatically rotates through images every 5 seconds</li>
+            <li>Use the buttons to pause, play, or navigate manually</li>
+            <li>Upload your own images to customize the banner</li>
+            <li>The progress bar shows the rotation status</li>
+            <li>Sample images are included for demonstration</li>
+        </ul>
+    </div>
+    
+    <script>
+        // Sample images for demonstration
+        const sampleImages = [
+            { id: 1, url: "https://source.unsplash.com/random/1200x400/?nature,landscape", caption: "Mountain Landscape" },
+            { id: 2, url: "https://source.unsplash.com/random/1200x400/?beach,ocean", caption: "Beach Sunset" },
+            { id: 3, url: "https://source.unsplash.com/random/1200x400/?city,urban", caption: "City Skyline" },
+            { id: 4, url: "https://source.unsplash.com/random/1200x400/?forest,green", caption: "Forest Path" },
+            { id: 5, url: "https://source.unsplash.com/random/1200x400/?mountain,peak", caption: "Mountain Peak" }
+        ];
+        
+        // DOM Elements
+        const bannerContent = document.getElementById('bannerContent');
+        const progressBar = document.getElementById('progressBar');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const playBtn = document.getElementById('playBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        
+        // Variables
+        let currentSlide = 0;
+        let interval;
+        let isPaused = false;
+        let userImages = [];
+        
+        // Initialize the banner with sample images
+        function initializeBanner() {
+            // Clear existing slides
+            bannerContent.innerHTML = '';
+            
+            // Add sample images
+            sampleImages.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                slide.id = `slide-${index}`;
+                slide.dataset.index = index;
+                slide.innerHTML = `
+                    <img src="${image.url}" alt="${image.caption}" class="slide-image">
+                    <div class="slide-caption">${image.caption}</div>
+                `;
+                
+                if (index === 0) {
+                    slide.classList.add('active');
+                    currentSlide = index;
+                }
+                
+                bannerContent.appendChild(slide);
+            });
+            
+            // Start the interval
+            startInterval();
+        }
+        
+        // Create a new slide from uploaded image
+        function createSlideFromImage(imageFile, index) {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.id = `slide-${index}`;
+            slide.dataset.index = index;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                slide.innerHTML = `
+                    <img src="${e.target.result}" alt="Uploaded Image ${index + 1}" class="slide-image">
+                    <div class="slide-caption">Uploaded Image ${index + 1}</div>
+                `;
+                bannerContent.appendChild(slide);
+                updateSlides();
+            };
+            reader.readAsDataURL(imageFile);
+        }
+        
+        // Update the slides array with user images
+        function updateSlides() {
+            // Remove all slides except the first one
+            while (bannerContent.children.length > 1) {
+                bannerContent.removeChild(bannerContent.lastChild);
+            }
+            
+            // Add sample images (except the first one) as user images
+            for (let i = 1; i < sampleImages.length; i++) {
+                createSlideFromImage(sampleImages[i].url, i);
+            }
+        }
+        
+        // Start the automatic rotation
+        function startInterval() {
+            interval = setInterval(() => {
+                if (!isPaused) {
+                    goToNextSlide();
+                    updateProgressBar();
+                }
+            }, 5000);
+        }
+        
+        // Go to the next slide
+        function goToNextSlide() {
+            // Remove active class from current slide
+            const slides = document.querySelectorAll('.slide');
+            slides[currentSlide].classList.remove('active');
+            
+            // Move to next slide or loop back to the first one
+            currentSlide = (currentSlide + 1) % slides.length;
+            
+            // Add active class to new slide
+            slides[currentSlide].classList.add('active');
+        }
+        
+        // Update the progress bar
+        function updateProgressBar() {
+            const progress = ((Date.now() % 5000) / 5000) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Event Listeners for Controls
+        pauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            pauseBtn.textContent = isPaused ? 'Play' : 'Pause';
+            if (!isPaused) {
+                startInterval();
+            } else {
+                clearInterval(interval);
+            }
+        });
+        
+        playBtn.addEventListener('click', () => {
+            isPaused = false;
+            pauseBtn.textContent = 'Pause';
+            startInterval();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            clearInterval(interval);
+            goToNextSlide();
+            updateProgressBar();
+            startInterval();
+        });
+        
+        // Upload functionality
+        uploadArea.addEventListener('click', () => {
+            imageInput.click();
+        });
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'white';
+            uploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+            uploadArea.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleImageUpload(e.dataTransfer.files);
+            }
+        });
+        
+        imageInput.addEventListener('change', () => {
+            if (imageInput.files.length > 0) {
+                handleImageUpload(imageInput.files);
+            }
+        });
+        
+        uploadBtn.addEventListener('click', () => {
+            imageInput.click();
+        });
+        
+        // Handle image upload
+        function handleImageUpload(files) {
+            // Clear previous user images (except the first sample)
+            while (bannerContent.children.length > 1) {
+                bannerContent.removeChild(bannerContent.lastChild);
+            }
+            
+            // Add new user images
+            userImages = Array.from(files);
+            userImages.forEach((file, index) => {
+                createSlideFromImage(file, index);
+            });
+        }
+        
+        // Initialize the banner when the page loads
+        window.addEventListener('DOMContentLoaded', initializeBanner);
+    </script>
+</body>
+</html>
