@@ -1,35 +1,461 @@
- ```html
- <!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Personal Resume</title>
-     <link rel="stylesheet" href="styles.css">
- </head>
- <body>
-     <header>
-         <h1>Your Name</h1>
-         <p>Helicopter Pilot</p>
-     </header>
-     <nav>
-         <ul>
-             <li><a href="index.html">Home</a></li>
-             <li><a href="flight_experience.html">Flight Experience</a></li>
-             <li><a href="videos.html">Videos</a></li>
-             <li><a href="pilotpage.html">Pilot Page</a></li>
-             <li><a href="bannerpage.html">Banner Page</a></li>
-         </ul>
-     </nav>
-     <main>
-         <section id="about">
-             <h2>About Me</h2>
-             <p>Brief introduction about yourself and your career as a pilot.</p>
-         </section>
-     </main>
-     <footer>
-         <p>&copy; 2023 Your Name</p>
-     </footer>
- </body>
- </html>
- ```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Stevenson · Flight Resume</title>
+  <style>
+    /* Simple clean reset, matching a plain document feel */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fafafa;
+      font-family: 'Segoe UI', 'Roboto', Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+      line-height: 1.5;
+      color: #1e1e1e;
+    }
+
+    /* Page container: white, subtle shadow, max width like a PDF page */
+    .resume {
+      max-width: 900px;
+      width: 100%;
+      background: #ffffff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      padding: 2.5rem 3rem;
+      border-radius: 4px;
+      border: 1px solid #eaeaea;
+    }
+
+    /* Header — name, contact line */
+    .header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #2c3e50;
+    }
+
+    .name {
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #1e2b37;
+      margin-bottom: 0.35rem;
+      line-height: 1.2;
+    }
+
+    .contact {
+      font-size: 1rem;
+      color: #3a4a5a;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      align-items: center;
+    }
+
+    .contact span {
+      white-space: nowrap;
+    }
+
+    .contact a {
+      color: #1e4a6b;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px dotted #a0b8cc;
+    }
+
+    .contact a:hover {
+      border-bottom: 1px solid #1e4a6b;
+    }
+
+    /* Section headings — all caps, spaced, like the PDF */
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #1e3a4e;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #cfdce6;
+      padding-bottom: 0.3rem;
+    }
+
+    /* First section after header needs less top margin */
+    .section-title:first-of-type {
+      margin-top: 0.5rem;
+    }
+
+    /* Education & Certification list */
+    .edu-item {
+      margin-bottom: 1.4rem;
+    }
+
+    .edu-item:last-child {
+      margin-bottom: 0.2rem;
+    }
+
+    .degree {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #0b2a3b;
+    }
+
+    .school {
+      font-weight: 500;
+      color: #2c4b62;
+    }
+
+    .meta {
+      font-size: 0.95rem;
+      color: #3e5a6e;
+      margin: 0.15rem 0 0.35rem 0;
+    }
+
+    .detail-list {
+      list-style: none;
+      margin: 0.4rem 0 0.8rem 0;
+      padding-left: 0.2rem;
+    }
+
+    .detail-list li {
+      font-size: 0.98rem;
+      color: #1e3a4e;
+      margin-bottom: 0.25rem;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .detail-list li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: #5c7f99;
+    }
+
+    /* Flight experience block — same style as PDF, with dash separators */
+    .flight-exp {
+      font-size: 1rem;
+      color: #1e2e3c;
+      background: #f5f8fa;
+      padding: 0.9rem 1.2rem;
+      border-radius: 4px;
+      border-left: 4px solid #2c5f7e;
+      margin: 0.5rem 0 1.2rem 0;
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    .flight-exp strong {
+      font-weight: 700;
+      color: #0b2a3b;
+    }
+
+    /* Aircraft two-column layout (rotor / airplane) */
+    .aircraft-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.5rem;
+      margin: 0.5rem 0 0.8rem 0;
+    }
+
+    .aircraft-category {
+      flex: 1 1 200px;
+    }
+
+    .aircraft-category h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e3a4e;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .aircraft-category ul {
+      list-style: none;
+      padding-left: 0.2rem;
+    }
+
+    .aircraft-category li {
+      font-size: 0.98rem;
+      margin-bottom: 0.25rem;
+      padding-left: 1rem;
+      position: relative;
+      color: #1e2e3c;
+    }
+
+    .aircraft-category li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #2c5f7e;
+      font-weight: 700;
+    }
+
+    /* Notable flight experience — bullet list with dashes */
+    .notable-list {
+      list-style: none;
+      margin: 0.5rem 0 0.5rem 0;
+      padding-left: 0.2rem;
+    }
+
+    .notable-list li {
+      font-size: 0.98rem;
+      color: #1e2e3c;
+      margin-bottom: 0.55rem;
+      padding-left: 1.3rem;
+      position: relative;
+    }
+
+    .notable-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: #2c5f7e;
+      font-weight: 600;
+    }
+
+    /* Work experience entries */
+    .job {
+      margin-bottom: 1.3rem;
+    }
+
+    .job-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.3rem 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .job-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #0b2a3b;
+    }
+
+    .job-company {
+      font-weight: 600;
+      color: #1e4a6b;
+      font-size: 1.02rem;
+    }
+
+    .job-date {
+      font-size: 0.95rem;
+      color: #3e5a6e;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .job-desc {
+      font-size: 0.98rem;
+      color: #1e3a4e;
+      margin-top: 0.35rem;
+      padding-left: 0.2rem;
+      line-height: 1.6;
+    }
+
+    .job-desc ul {
+      list-style: none;
+      padding-left: 1.2rem;
+      margin-top: 0.3rem;
+    }
+
+    .job-desc ul li {
+      margin-bottom: 0.3rem;
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .job-desc ul li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: #5c7f99;
+    }
+
+    /* Air Force entry uses similar styling */
+    .job .job-title + .job-company {
+      display: inline;
+    }
+
+    /* small utility */
+    .mt-1 {
+      margin-top: 0.5rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 650px) {
+      .resume {
+        padding: 1.8rem 1.5rem;
+      }
+      .name {
+        font-size: 1.9rem;
+      }
+      .contact {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+      }
+      .job-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .aircraft-group {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+    }
+
+    /* Print styling to keep clean if printed */
+    @media print {
+      body {
+        background: white;
+        padding: 0.2in;
+      }
+      .resume {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .contact a {
+        color: black;
+        border-bottom: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="resume">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="name">Alex Stevenson</div>
+      <div class="contact">
+        <span><a href="mailto:alex.stevenson.pilot@proton.me">alex.stevenson.pilot@proton.me</a></span>
+        <span>803-414-3653</span>
+        <span>Albuquerque, NM (KABQ)</span>
+      </div>
+      <div class="contact">
+        <span>(Website coming soon)</span>
+      </div>
+    </div>
+
+    <!-- EDUCATION & CERTIFICATIONS -->
+    <div class="section-title">Education &amp; Certifications</div>
+
+    <div class="edu-item">
+      <div class="degree">BS, Physics</div>
+      <div class="meta">Graduated 2009 &nbsp;·&nbsp; <span class="school">US Air Force Academy</span> | Colorado Springs CO</div>
+      <ul class="detail-list">
+        <li>Course of study focus on electronics</li>
+        <li>Completed Airmanship 490, Freefall Parachuting, 5 solo freefall jumps</li>
+      </ul>
+    </div>
+
+    <div class="edu-item">
+      <div class="degree">MS, Nuclear Physics</div>
+      <div class="meta">Graduated 2011 &nbsp;·&nbsp; <span class="school">Air Force Institute of Technology</span> | Dayton OH</div>
+    </div>
+
+    <!-- Certifications section — same visual level as education, no extra heading -->
+    <div class="edu-item" style="margin-top: 1.2rem;">
+      <div class="degree">Flight Certifications</div>
+      <ul class="detail-list" style="margin-top: 0.2rem;">
+        <li><strong>Flight Instructor Certificate</strong> &nbsp; Ratings: Rotorcraft Helicopter (Feb 2026), Instrument Helicopter (Aug 2026)</li>
+        <li><strong>Commercial Pilot Certificate</strong> &nbsp; Ratings/Endorsements: Rotorcraft Helicopter (Oct 2025), Instrument Helicopter (Jun 2026)</li>
+        <li><strong>Private Pilot Certificate</strong> &nbsp; Ratings/Endorsements: Rotorcraft Helicopter (Sep 2024), Airplane (SEL) (Oct 2025)</li>
+        <li><strong>Second Class Medical</strong> (Oct 2025) + Valid US Passport</li>
+        <li><strong>SFAR 73 endorsement</strong>, R22 and R44 (Aug 2026)</li>
+      </ul>
+    </div>
+
+    <!-- FLIGHT EXPERIENCE — now as a list -->
+    <div class="section-title">Flight Hours</div>
+    <ul class="flight-exp-list">
+      <li><strong>Total Time:</strong> 344 hrs TT</li>
+      <li><strong>PIC:</strong> 235 hrs</li>
+      <li><strong>Turbine:</strong> 20 hrs</li>
+      <li><strong>Cross Country:</strong> 76 hrs</li>
+      <li><strong>Simulated Instrument:</strong> 74 hrs</li>
+      <li><strong>Night:</strong> 19 hrs</li>
+      <li><strong>High Performance ASEL:</strong> 15 hrs</li>
+      <li><strong>High DA (&gt;5000'):</strong> 134 hrs</li>
+      <li><strong>Mountain flying:</strong> 32 hrs</li>
+    </ul>
+
+    <!-- AIRCRAFT -->
+    <div class="section-title">Aircraft Experience</div>
+    <div class="aircraft-group">
+      <div class="aircraft-category">
+        <h4>Rotor</h4>
+        <ul>
+          <li>204 (139 PIC)</li>
+          <li>R22: 133 hrs</li>
+          <li>R44: 50 hrs</li>
+          <li>R66: 10 hrs</li>
+          <li>Bell 206: 10 hrs</li>
+        </ul>
+      </div>
+      <div class="aircraft-category">
+        <h4>Airplane</h4>
+        <ul>
+          <li>140 (96 PIC)</li>
+          <li>Cessna 172: 131 hrs</li>
+          <li>Cessna 182: 4 hrs</li>
+          <li>Piper P28B: 4 hrs</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- NOTABLE FLIGHT EXPERIENCE -->
+    <div class="section-title">Notable Flight Experience</div>
+    <ul class="notable-list">
+      <li>Helicopter training at Vertical Limit Aviation, Albuquerque, NM – High DA, Class C airspace, mountainous environment</li>
+      <li>10-hour, 800nm XC flight in R66 from KBTR (Baton Rouge, LA) to KABQ (Albuquerque, NM)</li>
+      <li>Robinson Safety Course completion, Sep 2025</li>
+      <li>Mountain Flying Operations Course at Leading Edge Flight Academy, Bend, OR, completed July 2026</li>
+    </ul>
+
+    <!-- WORK EXPERIENCE -->
+    <div class="section-title">Work Experience</div>
+
+    <!-- Sandia National Laboratories -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Principal Member of Technical Staff</span>
+        <span class="job-date">Sep 2014 – Present</span>
+      </div>
+      <div class="job-company">Sandia National Laboratories</div>
+      <div class="job-desc">
+        <ul>
+          <li>Multiple positions throughout tenure, worked in areas including nuclear effects modeling, nuclear policy, systems engineering, intelligence analysis, satellite communications</li>
+          <li>Conducted modeling and simulation of various phenomena including nuclear physics, aerodynamics, optics, explosives, satellite system dynamics</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- US Air Force -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Scientist (Physicist)</span>
+        <span class="job-date"></span>
+      </div>
+      <div class="job-company">US Air Force</div>
+      <div class="job-desc">
+        <ul>
+          <li>Nuclear phenomenology modeling and simulation</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
